@@ -8,11 +8,6 @@ require("dotenv").config();
 const cors = require("cors");
 const initializeSocket = require("./sockets/socketInit");
 
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "http://localhost:5173",
-  },
-});
 
 //connect to mongodb
 const DB = process.env.MONGO_URI;
@@ -31,12 +26,15 @@ app.use(cors());
 
 //routes
 const authRoutes = require('./routes/authRoutes');
+const gameRoutes = require('./routes/gameRoutes');
+
+app.use('/api', authRoutes);
+app.use('/api', gameRoutes);
 
 // Initialize Socket.io
 initializeSocket(server);
 
-
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Hello World");
 });
 

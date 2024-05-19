@@ -4,6 +4,7 @@ const generateToken = require('../utils/generateToken');
 
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
+    console.log(req.body);
     const playerExists = await Player.findOne({email});
     if(playerExists){
         res.status(400).json({message: "Player already exists"});
@@ -31,7 +32,7 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
     const player = await Player.findOne({email});
     if(player && (await player.matchPassword(password))){
-        return res.json({
+        return res.status(201).json({
             _id: player._id,
             name: player.name,
             email: player.email,
