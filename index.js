@@ -14,9 +14,6 @@ const io = require("socket.io")(server, {
   },
 });
 
-// Apply the middleware
-io.use(socketAuth);
-
 //connect to mongodb
 const DB = process.env.MONGO_URI;
 mongoose

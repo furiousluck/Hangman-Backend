@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Room = require("../models/Room");
-const getWord = require("../utils/getWord");
+const getWord = require("../data/words");
 
 const handleSocketEvents = (io, socket) => {
   console.log(`⚡: ${socket.id} user just connected!`);
