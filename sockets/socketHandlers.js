@@ -134,6 +134,29 @@ const handleSocketEvents = (io, socket) => {
       console.error("Error finding room in MongoDB:", err);
     }
   });
+
+  socket.on("disconnect",async()=>{
+    try{
+      const room = await Room.findOne({ "players.socketID": socket.id });
+      for(let i=0;i<room.players.length;i++){
+        if(room.players[i].socketID === socket.id){
+          room.players.splice(i,1);
+          break;
+        }
+      }
+      room = await room.save();
+      if(room.players.length === 1){
+        io.broadcast(room.roomNumber).emit("end-game","Game Over");
+        room.remove();
+      }
+      else{
+        io.broadcast.to(room.roomNumber).emit('user-disconnected',room);
+      }
+    }catch(err){
+      console.error("Error finding room in MongoDB:", err);
+    }
+});
 };
+
 
 module.exports = handleSocketEvents;
